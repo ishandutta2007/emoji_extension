@@ -1,0 +1,9 @@
+I want to create a chrome extension which give user an option to add emoji  for any text box or input tags on any website. You can implement as a small emoji keyboard button below the textbox or input tag clicking on which gives all the options of emojis to add to textbox.
+
+====================
+seems like emojiPicker on line 59 in content_script.js is null when showCategory is being called
+
+
+====================
+For most of the websites it works fine but for some of the websites line 94  in content_script.js.
+I have verified with debugger that currentActiveInput.value has the value with emoji appended it is only the line 94 which is removing it.

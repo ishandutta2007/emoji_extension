@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Emoji Picker for Text Fields",
+  "version": "1.0",
+  "description": "Add emojis to any text field on any website with a convenient emoji picker",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["emoji-picker.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png",
+    "256": "icons/icon256.png"
+  }
+}
