@@ -86,12 +86,49 @@ function insertEmoji(emoji) {
     const end = currentActiveInput.selectionEnd;
     const value = currentActiveInput.value;
     
-    currentActiveInput.value = value.slice(0, start) + emoji + value.slice(end);
-    currentActiveInput.setSelectionRange(start + emoji.length, start + emoji.length);
-    currentActiveInput.focus();
+    // Store original value and selection
+    const newValue = value.slice(0, start) + emoji + value.slice(end);
+    const newCursorPos = start + emoji.length;
     
-    // Trigger input event for reactive frameworks
-    currentActiveInput.dispatchEvent(new Event('input', { bubbles: true }));
+    // Method 1: Try document.execCommand (works with many frameworks)
+    currentActiveInput.focus();
+    currentActiveInput.setSelectionRange(start, end);
+    
+    if (document.execCommand && document.execCommand('insertText', false, emoji)) {
+      // execCommand worked, cursor is already positioned correctly
+    } else {
+      // Method 2: Fallback to direct value setting with multiple event triggers
+      currentActiveInput.value = newValue;
+      currentActiveInput.setSelectionRange(newCursorPos, newCursorPos);
+      
+      // Trigger multiple events to ensure framework compatibility
+      const events = [
+        new Event('input', { bubbles: true, cancelable: true }),
+        new Event('change', { bubbles: true, cancelable: true }),
+        new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key: emoji }),
+        new KeyboardEvent('keypress', { bubbles: true, cancelable: true, key: emoji }),
+        new KeyboardEvent('keyup', { bubbles: true, cancelable: true, key: emoji }),
+        new InputEvent('beforeinput', { bubbles: true, cancelable: true, data: emoji, inputType: 'insertText' }),
+        new InputEvent('input', { bubbles: true, cancelable: true, data: emoji, inputType: 'insertText' })
+      ];
+      
+      events.forEach(event => {
+        try {
+          currentActiveInput.dispatchEvent(event);
+        } catch (e) {
+          // Some events might not be supported in all browsers
+        }
+      });
+    }
+    
+    // Final fallback: set value again in case it was overridden
+    setTimeout(() => {
+      if (currentActiveInput && currentActiveInput.value !== newValue) {
+        currentActiveInput.value = newValue;
+        currentActiveInput.setSelectionRange(newCursorPos, newCursorPos);
+        currentActiveInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, 0);
   }
   hideEmojiPicker();
 }
