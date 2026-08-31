@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="Emoji Picker Banner" width="100%">
+</p>
+
 # Emoji Picker for Text Fields 🎯😀
 
 <div align="center">
