@@ -5,5 +5,5 @@ seems like emojiPicker on line 59 in content_script.js is null when showCategory
 
 
 ====================
-For most of the websites it works fine but for some of the websites line 94  in content_script.js.
-I have verified with debugger that currentActiveInput.value has the value with emoji appended it is only the line 94 which is removing it.
+For most of the websites it works fine but for some of the websites line 94  in content_script.js seems to be removing the emoji after adding it.
+I have verified with debugger that currentActiveInput.value has the value with emoji appended on line 93, it is only the line 94 which is removing it.
